@@ -1,22 +1,16 @@
-from django.urls import path
-from . import views
-
-app_name = 'students'
+from django.contrib import admin
+from django.urls import path, include
+from django.shortcuts import redirect
+from django.conf import settings
+from django.conf.urls.static import static
+from students import views
 
 urlpatterns = [
-    # Student Authentication
-    path('login/', views.student_login, name='login'),
-    path('logout/', views.student_logout, name='logout'),
-    path('dashboard/', views.student_dashboard, name='dashboard'),
-    path('grades/', views.student_grades, name='grades'),
-    path('attendance/', views.student_attendance, name='attendance'),
-    path('fees/', views.student_fees, name='fees'),
-    path('profile/', views.student_profile, name='profile'),
-    path('edit-profile/', views.edit_profile, name='edit_profile'),  # ← ADD THIS
-    path('grades/', views.student_grades, name='grades'),
-    path('attendance/', views.student_attendance, name='attendance'),
-    path('pay-fees/', views.pay_fees, name='pay_fees'),
+    path('admin/', admin.site.urls),
+    path('students/', include('students.urls')),
     path('payment/callback/', views.payment_callback, name='payment_callback'),
-    path('payment/callback/', views.payment_callback, name='payment_callback'),
+    path('', lambda request: redirect('admin/')),
 ]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
